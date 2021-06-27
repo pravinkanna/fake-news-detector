@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Login</title>
+		<style>
+			.srouce {
+				text-align: center;
+				color: #ffffff;
+				padding: 10px;
+			}
+		</style>
+		<title>login</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</head>
+	<body>
+		<div class="main-container">
+			<div class="form-container">
+				<div class="form-body">
+					<form action="/admin" method="post">
+						<div style="color: red">{{ error }}</div>
+						<h1>Admin Login</h1>
+						<label>UserName : </label><input type="text" name="username" placeholder="Enter your email" required class="box" /><br /><br />
+						<label>Password : </label><input type="password" name="password" placeholder="Enter your password" required class="box" /><br /><br />
+						<input type="submit" value=" Submit " /><br />
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
