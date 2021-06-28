@@ -21,6 +21,10 @@ def news():
       fakenews['label']='FAKE'
       news = pd.concat([truenews, fakenews])
       
+      print(news.groupby(['subject'])['text'].count())
+      print()
+      print(news.groupby(['label'])['text'].count())
+    
     X = news['text']
     y = news['label']
     #Splitting the data into train
