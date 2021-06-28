@@ -9,38 +9,43 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
 
 def news():
-  #Importing the cleaned file containing the text and label
-  truenews = pd.read_csv('True.csv')
-  fakenews = pd.read_csv('Fake.csv')
-  mixednews = pd.read_csv('news.csv')
+  try:
+    news=""
+    #Importing the cleaned file containing the text and label
+    try:
+      news = pd.read_csv('uploaded.csv')
+    except:
+      truenews = pd.read_csv('True.csv')
+      fakenews = pd.read_csv('Fake.csv')
+      truenews['label']='REAL'
+      fakenews['label']='FAKE'
+      news = pd.concat([truenews, fakenews])
+      
+    X = news['text']
+    y = news['label']
+    #Splitting the data into train
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-  truenews['label']='REAL'
-  fakenews['label']='FAKE'
+    #Creating a pipeline that first creates bag of words(after applying stopwords) & then applies Multinomial Naive Bayes model
+    pipeline = Pipeline([('tfidf', TfidfVectorizer(stop_words='english')), ('nbmodel', MultinomialNB())])
 
-  news = pd.concat([truenews, fakenews, mixednews])
+    #Training our data
+    pipeline.fit(X_train, y_train)
 
+    #Predicting the label for the test data
+    pred = pipeline.predict(X_test)
 
-  X = news['text']
-  y = news['label']
+    #Checking the performance of our model
+    print(classification_report(y_test, pred))
+    print(confusion_matrix(y_test, pred))
 
-  #Splitting the data into train
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    #Serialising the file
+    with open('model.pickle', 'wb') as handle:
+        pickle.dump(pipeline, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-  #Creating a pipeline that first creates bag of words(after applying stopwords) & then applies Multinomial Naive Bayes model
-  pipeline = Pipeline([('tfidf', TfidfVectorizer(stop_words='english')), ('nbmodel', MultinomialNB())])
+    return True
 
-  #Training our data
-  pipeline.fit(X_train, y_train)
-
-  #Predicting the label for the test data
-  pred = pipeline.predict(X_test)
-
-  #Checking the performance of our model
-  print(classification_report(y_test, pred))
-  print(confusion_matrix(y_test, pred))
-
-  #Serialising the file
-  with open('model.pickle', 'wb') as handle:
-      pickle.dump(pipeline, handle, protocol=pickle.HIGHEST_PROTOCOL)
+  except:
+    return False
 
 news()

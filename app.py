@@ -57,7 +57,7 @@ def upload():
 		if 'username' in session:
 			f = request.files['file']
 			if '.csv' in f.filename:
-				f.filename = 'news.csv'
+				f.filename = 'uploaded.csv'
 				f.save(f.filename)
 				return render_template('admin.html',name=session['username'],msg='file has been uploaded sucessfully')
 			else:
@@ -90,11 +90,11 @@ def predict():
     article.parse()
     article.nlp()
     news = article.summary
-    print(news)
+    print("\n",news,"\n")
     #Passing the news article to the model and returing whether it is Fake or Real
     pred = model.predict([news])
     return render_template('main.html', prediction_text='The news is "{}"'.format(pred[0]))
     
 if __name__=="__main__":
     port=int(os.environ.get('PORT',5000))
-    app.run(port=port,debug=True,use_reloader=False)
+    app.run(port=port,debug=True,use_reloader=True)
